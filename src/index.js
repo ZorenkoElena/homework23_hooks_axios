@@ -3,6 +3,35 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+axios.defaults.baseURL = 'https://rickandmortyapi.com/api/';
+
+axios.interceptors.request.use(
+  function (config) {
+    config.headers.Authorization = 'parol';
+    config.headers.Accept = 'application/json';
+    config.headers.MyField = 'foobar';
+    return config;
+  },
+  function (error) {
+    console.log('interceptors error');
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  function (response) {
+    // Любой код состояния, находящийся в диапазоне 2xx, вызывает срабатывание этой функции
+    // Здесь можете сделать что-нибудь с ответом
+    return response;
+  },
+  function (error) {
+    alert('interceptors error in resp');
+    return Promise.reject(error);
+  }
+);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -11,7 +40,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
